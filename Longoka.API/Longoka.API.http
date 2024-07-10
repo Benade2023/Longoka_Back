@@ -1,0 +1,6 @@
+@Longoka.API_HostAddress = http://localhost:5199
+
+GET {{Longoka.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

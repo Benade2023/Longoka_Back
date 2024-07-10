@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{AA44B01E-DDA2-45F8-9635-3F295952E801}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{E5AED3E2-CFD3-421F-91FA-B7A3645350E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CE62507C-1893-4C1F-B3C4-22E106B468A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Longoka.Domain", "Longoka.Domain\Longoka.Domain.csproj", "{ABC3B16C-176D-4873-8A7F-A190DBE9CB76}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Longoka.Dapper", "Longoka.Dapper\Longoka.Dapper.csproj", "{FF065982-24FC-4228-800F-E328CC093C73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Longoka.BL", "Longoka.BL\Longoka.BL.csproj", "{361B4669-11EB-43B2-93A5-DEEA4870A709}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Longoka.API", "Longoka.API\Longoka.API.csproj", "{C63CE188-36AA-4225-98A3-E791A40A4679}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ABC3B16C-176D-4873-8A7F-A190DBE9CB76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABC3B16C-176D-4873-8A7F-A190DBE9CB76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC3B16C-176D-4873-8A7F-A190DBE9CB76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC3B16C-176D-4873-8A7F-A190DBE9CB76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF065982-24FC-4228-800F-E328CC093C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF065982-24FC-4228-800F-E328CC093C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF065982-24FC-4228-800F-E328CC093C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF065982-24FC-4228-800F-E328CC093C73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{361B4669-11EB-43B2-93A5-DEEA4870A709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{361B4669-11EB-43B2-93A5-DEEA4870A709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{361B4669-11EB-43B2-93A5-DEEA4870A709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{361B4669-11EB-43B2-93A5-DEEA4870A709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C63CE188-36AA-4225-98A3-E791A40A4679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63CE188-36AA-4225-98A3-E791A40A4679}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63CE188-36AA-4225-98A3-E791A40A4679}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63CE188-36AA-4225-98A3-E791A40A4679}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ABC3B16C-176D-4873-8A7F-A190DBE9CB76} = {E5AED3E2-CFD3-421F-91FA-B7A3645350E1}
+		{FF065982-24FC-4228-800F-E328CC093C73} = {E5AED3E2-CFD3-421F-91FA-B7A3645350E1}
+		{361B4669-11EB-43B2-93A5-DEEA4870A709} = {E5AED3E2-CFD3-421F-91FA-B7A3645350E1}
+		{C63CE188-36AA-4225-98A3-E791A40A4679} = {E5AED3E2-CFD3-421F-91FA-B7A3645350E1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68410CA6-6516-465A-8E55-EB054193D7F0}
+	EndGlobalSection
+EndGlobal
