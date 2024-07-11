@@ -17,8 +17,8 @@ namespace Longoka.Dapper.Providers
         {
             try
             {
-                var sqlRequette = $"INSERT INTO {TABLENAME} (userid, ecoleid, profileid)" +
-                    $"VALUES (@userid, @ecoleid, @profileid)";
+                var sqlRequette = $"INSERT INTO {TABLENAME} (username, password, completname, birthday, numerorue, ruename, quartier, ville, pays, telephoneparent, emailparent, profileid, ecoleid)" +
+                    $"VALUES (@username, @password, @completname, @birthday, @numerorue, @ruename, @quartier, @ville, @pays, @telephoneparent, @emailparent, @profileid, @ecoleid)";
                 using var dapperConnexion = new NpgsqlConnection(_connexionString);
                 dapperConnexion.ExecuteScalar<ParentEleves>(sqlRequette, parentEleve);
             }
@@ -54,7 +54,7 @@ namespace Longoka.Dapper.Providers
 
         public void Update(ParentEleves parentEleves)
         {
-            var sqlRequette = $"UPDATE {TABLENAME} SET userid=@userid, ecoleid=@ecoleid, profileid=@profileid";
+            var sqlRequette = $"UPDATE {TABLENAME} SET username=@username, password=@password, completname=@completname, birthday=@birthday, numerorue=@numerorue, ruename=@ruename, quartier=@quartier, ville=@ville, pays=@pays, telephoneparent=@telephoneparent, emailparent=@emailparent, profileid=@profileid, ecoleid=@ecoleid";
             using var dapperConnexion = new NpgsqlConnection(_connexionString);
             dapperConnexion.ExecuteScalar(sqlRequette, parentEleves);
         }
