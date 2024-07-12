@@ -16,7 +16,7 @@ namespace Longoka.Dapper.Providers
         private const string TABLENAME = "Matieres";
         public MatiereProviderDapper(string connexionString)
         {
-            _connexionString += connexionString;
+            _connexionString = connexionString;
         }
         public void Create(Matieres matiere)
         {

@@ -21,8 +21,8 @@ namespace Longoka.Dapper.Providers
 
         public void Create(Eleves eleve)
         {
-            var sqlRequette = $"INSERT INTO {TABLENAME} (username, password, completname, birthday, numerorue, ruename, quartier, ville, pays, parentid, ecoleid, profileid, classeid, matiereids) " +
-                    $"VALUES (@username, @password, @completname, @birthday, @numerorue, @ruename, @quartier, @ville, @pays, @parentid, @ecoleid, @profileid, @classeid, @matiereids)";
+            var sqlRequette = $"INSERT INTO {TABLENAME} (username, password, completname, birthday, birthdayplace, gender, nationality, numerorue, ruename, quartier, ville, pays, parentid, ecoleid, profileid, classeid, matiereids) " +
+                    $"VALUES (@username, @password, @completname, @birthday, @birthdayplace, @gender, @nationality, @numerorue, @ruename, @quartier, @ville, @pays, @parentid, @ecoleid, @profileid, @classeid, @matiereids)";
             using var dapperConnexion = new NpgsqlConnection(_connexionString);
             dapperConnexion.ExecuteScalar<Eleves>(sqlRequette);
         }
@@ -63,7 +63,7 @@ namespace Longoka.Dapper.Providers
         {
             try
             {
-                var sqlRequette = $"UPDATE {TABLENAME} SET username=@username, password=@password, completname=@completname, birthday=@birthday, numerorue=@numerorue, ruename=@ruename, quartier=@quartier, ville=@ville, pays=@pays, parentid=@parentid, ecoleid=@ecoleid, profileid=@profileid, classeid=@classeid, matiereids=@matiereids";
+                var sqlRequette = $"UPDATE {TABLENAME} SET username=@username, password=@password, completname=@completname, birthday=@birthday, birthdayplace=@birthdayplace, gender=@gender, nationality=@nationality, numerorue=@numerorue, ruename=@ruename, quartier=@quartier, ville=@ville, pays=@pays, parentid=@parentid, ecoleid=@ecoleid, profileid=@profileid, classeid=@classeid, matiereids=@matiereids";
                 using var dapperConnexion = new NpgsqlConnection(_connexionString);
                 dapperConnexion.ExecuteScalar(sqlRequette, eleve);
             }

@@ -11,7 +11,7 @@ namespace Longoka.Domain.DAO
         public Guid MatiereId { get; set; }
         public string Niveau {  get; set; }
         public string MatiereName { get; set; }
-        public Classes[] Classe { get; set; }
+        public string[] Classe { get; set; }
         public Guid EcoleId { get; set; }
         public override string ToString()
         {
