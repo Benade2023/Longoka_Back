@@ -13,6 +13,9 @@ namespace Longoka.Domain.DAO
         public string Password { get; set; }
         public string CompletName { get; set; }
         public DateTime Birthday { get; set; }
+        public string BirthdayPlace { get; set; }
+        public string Gender { get; set; }
+        public string Nationality { get; set; }
         public int NumeroRue { get; set; }
         public string RueName { get; set; }
         public string Quartier { get; set; }
