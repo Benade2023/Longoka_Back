@@ -1,30 +1,97 @@
 ﻿using Longoka.BL.Interfaces;
 using Longoka.Domain.DAO;
 using Longoka.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Longoka.BL.BL
 {
     public class ParentEleveManager : IParentEleveManager
     {
-        private readonly IProvider<ParentEleves, Guid> _provider;
+        private readonly IProvider<ParentEleve, int> _provider;
 
-        public ParentEleveManager(IProvider<ParentEleves, Guid> provider)
+        public ParentEleveManager(IProvider<ParentEleve, int> provider)
         {
             _provider = provider;
         }
 
-        public bool CreateParent(ParentEleves parent)
+        public async Task<StatusResponse> CreateParent(ParentEleve parent)
         {
-          
+            if (string.IsNullOrEmpty(parent.NomParent))
+            {
+                throw new Exception("Le nom de  est obligatoire");
+            }
             try
             {
-                _provider.Create(parent);
-                return true;
+                var statut = await _provider.Create(parent);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = "Échec d'enrégistrement.",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+
+        public async Task<StatusResponse> DeleteParent(int id)
+        {
+            try
+            {
+                var statut = await _provider.Delete(id);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echec de supression" };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+
+        public async Task<ParentEleve> GetParentById(int id)
+        {
+            try
+            {
+                var result = await _provider.GetById(id);
+                if (result != null)
+                {
+                    return result;
+                }
+                return null!;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<IEnumerable<ParentEleve>> GetParentList()
+        {
+            try
+            {
+                var result = await _provider.GetAll();
+                if (result == null)
+                {
+                    return [];
+                }
+                return result;
             }
             catch (Exception)
             {
@@ -33,57 +100,23 @@ namespace Longoka.BL.BL
             }
         }
 
-        public void DeleteParent(Guid id)
+        public async Task<StatusResponse> UpdateParent(ParentEleve parent)
         {
             try
             {
-                _provider.Delete(id);
+                var statut = await _provider.Update(parent);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echèc de mise à jour." };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
-            }
-        }
-
-        public ParentEleves GetParentById(Guid id)
-        {
-            try
-            {
-                return _provider.GetById(id);
+                return new StatusResponse() { Success = false, Message = ex.Message };
 
             }
-            catch (Exception)
-            {
 
-                throw;
-            }
-        }
-
-        public List<ParentEleves> GetParentList()
-        {
-            try
-            {
-                return _provider.GetAll();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public void UpdateParent(ParentEleves parent)
-        {
-            try
-            {
-                _provider.Update(parent);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

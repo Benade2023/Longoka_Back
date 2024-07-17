@@ -4,10 +4,10 @@ namespace Longoka.BL.Interfaces
 {
     public interface IPersonnelEnseignantManager
     {
-        bool CreateEnseignant(PersonnelEnseignants enseignant);
-        List<PersonnelEnseignants> GetEnseignantList();
-        void DeleteEnseignant(Guid id);
-        void UpdateEnseignant(PersonnelEnseignants enseignant);
-        PersonnelEnseignants GetEnseignantById(Guid id);
+        Task<StatusResponse> CreateEnseignant(Enseignant enseignant);
+        Task<IEnumerable<Enseignant>> GetEnseignantList();
+        Task<StatusResponse> DeleteEnseignant(int id);
+        Task<StatusResponse> UpdateEnseignant(Enseignant enseignant);
+        Task<Enseignant> GetEnseignantById(int id);
     }
 }

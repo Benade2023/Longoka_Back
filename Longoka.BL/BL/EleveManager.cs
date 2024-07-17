@@ -1,30 +1,100 @@
 ﻿using Longoka.BL.Interfaces;
 using Longoka.Domain.DAO;
 using Longoka.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Longoka.BL.BL
 {
     public class EleveManager : IEleveManager
     {
-        private readonly IProvider<Eleves, Guid> _provider;
+        private readonly IProvider<Eleve, int> _provider;
 
-        public EleveManager(IProvider<Eleves, Guid> provider)
+        public EleveManager(IProvider<Eleve, int> provider)
         {
             _provider = provider;
         }
 
-        public bool CreateEleve(Eleves eleve)
+        public async Task<StatusResponse> CreateEleve(Eleve eleve)
         {
-           
             try
             {
-                _provider.Create(eleve);
-                return true;
+                if (string.IsNullOrEmpty(eleve.Nom))
+                {
+                    throw new Exception("Le nom de l'élève est requis.");
+                }
+
+                var statut = await _provider.Create(eleve);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = "Échec d'enrégistrement.",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+        public async Task<StatusResponse> DeleteEleve(int id)
+        {
+            try
+            {
+                var statut = await _provider.Delete(id);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echec de supression" };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+
+        public async Task<Eleve> GetEleveById(int id)
+        {
+            try
+            {
+                var result = await _provider.GetById(id);
+                if (result != null)
+                {
+                    return result;
+                }
+                return null!;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<IEnumerable<Eleve>> GetEleveList()
+        {
+            try
+            {
+                var result = await _provider.GetAll();
+                if (result == null)
+                {
+                    return [];
+                }
+                return result;
             }
             catch (Exception)
             {
@@ -33,57 +103,23 @@ namespace Longoka.BL.BL
             }
         }
 
-        public void DeleteEleve(Guid id)
+        public async Task<StatusResponse> UpdateEleve(Eleve eleve)
         {
             try
             {
-                _provider.Delete(id);
+                var statut = await _provider.Update(eleve);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echèc de mise à jour." };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
-            }
-        }
-
-        public Eleves GetEleveById(Guid id)
-        {
-            try
-            {
-                return _provider.GetById(id);
+                return new StatusResponse() { Success = false, Message = ex.Message };
 
             }
-            catch (Exception)
-            {
 
-                throw;
-            }
-        }
-
-        public List<Eleves> GetEleveList()
-        {
-            try
-            {
-                return _provider.GetAll();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public void UpdateEleve(Eleves eleve)
-        {
-            try
-            {
-                _provider.Update(eleve);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

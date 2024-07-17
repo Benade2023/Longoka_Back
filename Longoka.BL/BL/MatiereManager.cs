@@ -6,28 +6,98 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Longoka.BL.BL
 {
     public class MatiereManager : IMatiereManager
     {
-        private readonly IProvider<Matieres, Guid> _provider;
+        private readonly IProvider<Matiere, int> _provider;
 
-        public MatiereManager(IProvider<Matieres, Guid> provider)
+        public MatiereManager(IProvider<Matiere, int> provider)
         {
             _provider = provider;
         }
 
-        public bool CreateMatiere(Matieres matiere)
+        public async Task<StatusResponse> CreateMatiere(Matiere matiere)
         {
             if (string.IsNullOrEmpty(matiere.MatiereName))
             {
-                throw new Exception("Le nom de la matiere est obligatoire");
+                throw new Exception("Le nom de la matière est obligatoire");
             }
             try
             {
-                _provider.Create(matiere);
-                return true;
+                var statut = await _provider.Create(matiere);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = "Échec d'enrégistrement.",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+        public async Task<StatusResponse> DeleteMatiere(int id)
+        {
+            try
+            {
+                var statut = await _provider.Delete(id);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echec de supression" };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+
+        public async Task<Matiere> GetMatiereById(int id)
+        {
+            try
+            {
+                var result = await _provider.GetById(id);
+                if (result != null)
+                {
+                    return result;
+                }
+                return null!;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<IEnumerable<Matiere>> GetMatiereList()
+        {
+            try
+            {
+                var result = await _provider.GetAll();
+                if (result == null)
+                {
+                    return [];
+                }
+                return result;
             }
             catch (Exception)
             {
@@ -36,57 +106,22 @@ namespace Longoka.BL.BL
             }
         }
 
-        public void DeleteMatiere(Guid id)
+        public async Task<StatusResponse> UpdateMatiere(Matiere matiere)
         {
             try
             {
-                _provider.Delete(id);
+                var statut = await _provider.Update(matiere);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echèc de mise à jour." };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new StatusResponse() { Success = false, Message = ex.Message };
             }
-        }
 
-        public Matieres GetMatiereById(Guid id)
-        {
-            try
-            {
-                return _provider.GetById(id);
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public List<Matieres> GetMatiereList()
-        {
-            try
-            {
-                return _provider.GetAll();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public void UpdateMatiere(Matieres matiere)
-        {
-            try
-            {
-                _provider.Update(matiere);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

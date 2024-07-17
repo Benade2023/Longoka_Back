@@ -1,30 +1,22 @@
 ﻿using Longoka.BL.Interfaces;
 using Longoka.Domain.DAO;
 using Longoka.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace Longoka.BL.BL
 {
     public class UserManager : IUserManager
     {
-        private readonly IProvider<Users, Guid> _provider;
+        private readonly IProvider<User, int> _provider;
 
-        public UserManager(IProvider<Users, Guid> provider)
+        public UserManager(IProvider<User, int> provider)
         {
             _provider = provider;
         }
 
-        public bool CreateUser(Users user)
+        public bool CreateUser(User user)
         {
-            if (string.IsNullOrEmpty(user.CompletName))
-            {
-                throw new Exception("Le nom  est obligatoire");
-            }
+          
             try
             {
                 _provider.Create(user);
@@ -37,7 +29,7 @@ namespace Longoka.BL.BL
             }
         }
 
-        public void DeleteUser(Guid id)
+        public void DeleteUser(int id)
         {
             try
             {
@@ -50,11 +42,11 @@ namespace Longoka.BL.BL
             }
         }
 
-        public Users GetUserById(Guid id)
+        public User GetUserById(int id)
         {
             try
             {
-                return _provider.GetById(id);
+                return new User();
 
             }
             catch (Exception)
@@ -64,11 +56,11 @@ namespace Longoka.BL.BL
             }
         }
 
-        public List<Users> GetUserList()
+        public List<User> GetUserList()
         {
             try
             {
-                return _provider.GetAll();
+                return new List<User>();
             }
             catch (Exception)
             {
@@ -77,7 +69,7 @@ namespace Longoka.BL.BL
             }
         }
 
-        public void UpdateUser(Users user)
+        public void UpdateUser(User user)
         {
             try
             {

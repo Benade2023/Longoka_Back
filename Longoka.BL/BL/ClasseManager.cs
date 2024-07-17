@@ -1,33 +1,92 @@
 ﻿using Longoka.BL.Interfaces;
 using Longoka.Domain.DAO;
 using Longoka.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Longoka.BL.BL
 {
     public class ClasseManager : IClasseManager
     {
-        private readonly IProvider<Classes, Guid> _provider;
+        private readonly IProvider<Classe, int> _provider;
 
-        public ClasseManager(IProvider<Classes, Guid> provider)
+        public ClasseManager(IProvider<Classe, int> provider)
         {
             _provider = provider;
         }
-
-        public bool CreateClasse(Classes classe)
+        public async Task<StatusResponse> CreateClasse(Classe classe)
         {
-            if (string.IsNullOrEmpty(classe.ClasseName))
-            {
-                throw new Exception("Le nom de la classe est obligatoire");
-            }
             try
             {
-                _provider.Create(classe);
-                return true;
+                var statut = await _provider.Create(classe);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = "Échec d'enrégistrement.",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+        public async Task<StatusResponse> DeleteClasse(int id)
+        {
+            try
+            {
+                var statut = await _provider.Delete(id);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echec de supression" };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+
+        public async Task<Classe> GetClasseById(int id)
+        {
+            try
+            {
+                var result = await _provider.GetById(id);
+                if (result != null)
+                {
+                    return result;
+                }
+                return null!;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<IEnumerable<Classe>> GetClasseList()
+        {
+            try
+            {
+                var result = await _provider.GetAll();
+                if (result == null)
+                {
+                    return [];
+                }
+                return result;
             }
             catch (Exception)
             {
@@ -36,57 +95,23 @@ namespace Longoka.BL.BL
             }
         }
 
-        public void DeleteClasse(Guid id)
+        public async Task<StatusResponse> UpdateClasse(Classe classe)
         {
             try
             {
-                _provider.Delete(id);
+                var statut = await _provider.Update(classe);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echèc de mise à jour." };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
-            }
-        }
-
-        public Classes GetClasseById(Guid id)
-        {
-            try
-            {
-                return _provider.GetById(id);
+                return new StatusResponse() { Success = false, Message = ex.Message };
 
             }
-            catch (Exception)
-            {
 
-                throw;
-            }
-        }
-
-        public List<Classes> GetClasseList()
-        {
-            try
-            {
-                return _provider.GetAll();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public void UpdateClasse(Classes classe)
-        {
-            try
-            {
-                _provider.Update(classe);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

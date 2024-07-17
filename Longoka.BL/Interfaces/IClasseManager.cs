@@ -4,10 +4,11 @@ namespace Longoka.BL.Interfaces
 {
     public interface IClasseManager
     {
-        bool CreateClasse(Classes classe);
-        List<Classes> GetClasseList();
-        void DeleteClasse(Guid id);
-        void UpdateClasse(Classes classe);
-        Classes GetClasseById(Guid id);
+        Task<StatusResponse> CreateClasse(Classe classe);
+        Task<IEnumerable<Classe>> GetClasseList();
+        Task<StatusResponse> DeleteClasse(int id);
+        Task<StatusResponse> UpdateClasse(Classe classe);
+        Task<Classe> GetClasseById(int id);
+
     }
 }

@@ -2,58 +2,132 @@
 using Longoka.Domain.DAO;
 using Longoka.Domain.Interfaces;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Longoka.Dapper.Providers
 {
-    public class ProfileProviderDapper : IProvider<Profiles, Guid>
+    public class ProfileProviderDapper : IProvider<Profile,int>
     {
         private string _connexionString = string.Empty;
         private const string TABLENAME = "Profiles";
+        private NpgsqlConnection _connexion;
+
         public ProfileProviderDapper(string connexionString)
         {
             _connexionString = connexionString;
-        }
-        public void Create(Profiles profile)
-        {
-            var sqlRequette = $"INSERT INTO {TABLENAME} (profilename, description, ecoleid)" +
-                    $"VALUES (@profilename, @description, @ecoleid)";
-            using var dapperConnexion = new NpgsqlConnection(_connexionString);
-            dapperConnexion.ExecuteScalar<Profiles>(sqlRequette, profile);
+            _connexion = new NpgsqlConnection(_connexionString);
         }
 
-        public void Delete(Guid id)
+        public async Task<StatusResponse> Create(Profile profile)
         {
-            var sqlRequette = $"DELETE FROM {TABLENAME} WHERE ProfileId = {id}";
-            using var dapperConnexion = new NpgsqlConnection(_connexionString);
-            dapperConnexion.Query(sqlRequette, id);
+            try
+            {
+                var sqlRequette = $"INSERT INTO {TABLENAME} (profilename, description, etablissementid) " +
+                    $"VALUES (@profilename, @description, @etablissementid)";
+
+                await _connexion.OpenAsync();
+                await _connexion.ExecuteScalarAsync<Profile>(sqlRequette, profile);
+
+                return new StatusResponse()
+                {
+                    Message = "Enrégistrment effectué avce succès."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
         }
 
-        public List<Profiles> GetAll()
+        public async Task<StatusResponse> Delete(int id)
         {
-            var sqlRequette = $"SELECT * FROM {TABLENAME}";
-            using var dapperConnexion = new NpgsqlConnection(_connexionString);
-            var result = dapperConnexion.Query<Profiles>(sqlRequette);
-            return result.ToList();
+            try
+            {
+                var sqlRequette = $"DELETE FROM {TABLENAME} WHERE profileid = {id}";
+                await _connexion.OpenAsync();
+                var result = await _connexion.QueryFirstOrDefaultAsync(sqlRequette, id);
+
+                return new StatusResponse()
+                {
+                    Message = "Suppression effectuée avce succès."
+                };
+            }
+            catch (Exception ex)
+            {
+
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+        public async Task<IEnumerable<Profile>> GetAll()
+        {
+            try
+            {
+                var sqlRequette = $"SELECT * FROM {TABLENAME}";
+                await _connexion.OpenAsync();
+                var result = await _connexion.QueryAsync<Profile>(sqlRequette);
+
+                if (result is null)
+                {
+                    return [];
+                }
+                return result.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Profiles GetById(Guid id)
+        public async Task<Profile> GetById(int id)
         {
-            var sqlRequette = $"SELECT * FROM {TABLENAME} WHERE ProfileId = {id}";
-            using var dapperConnexion = new NpgsqlConnection(_connexionString);
-            var result = dapperConnexion.QueryFirstOrDefault<Profiles>(sqlRequette);
-            return result;
+            try
+            {
+                var sqlRequette = $"SELECT * FROM {TABLENAME} WHERE profileid = {id}";
+                await _connexion.OpenAsync();
+                var result = await _connexion.QuerySingleOrDefaultAsync<Profile>(sqlRequette);
+
+                if (result is null)
+                {
+                    return null!;
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public void Update(Profiles profile)
+        public async Task<StatusResponse> Update(Profile profile)
         {
-            var sqlRequette = $"UPDATE {TABLENAME} SET profilename=@profilename, description=@description, ecoleid=@ecoleid";
-            using var dapperConnexion = new NpgsqlConnection(_connexionString);
-            dapperConnexion.ExecuteScalar(sqlRequette, profile);
+            try
+            {
+                var sqlRequette = $"UPDATE {TABLENAME} SET profilename=@profilename, description=@description, etablissementid=@etablissementid" +
+                   $" WHERE Profileid = {profile.ProfileId}";
+
+                await _connexion.OpenAsync();
+                var result = await _connexion.ExecuteAsync(sqlRequette, profile);
+                if (result == 0)
+                {
+                    throw new InvalidOperationException("Aucun utilisateur trouvé avec l'ID spécifié.");
+                }
+
+                return new StatusResponse() { Message = "Mise à jour effectuée avec succès" };
+
+            }
+            catch (NpgsqlException ex)
+            {
+                return new StatusResponse() { Success = false, Message = ex.Message };
+            }
         }
+
     }
 }

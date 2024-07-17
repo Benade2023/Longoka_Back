@@ -4,10 +4,10 @@ namespace Longoka.BL.Interfaces
 {
     public interface IProfileManager
     {
-        bool CreateProfile(Profiles profile);
-        List<Profiles> GetProfileList();
-        void DeleteProfile(Guid id);
-        void UpdateProfile(Profiles profile);
-        Profiles GetProfileById(Guid id);
+        Task<StatusResponse> CreateProfile(Profile profile);
+        Task<IEnumerable<Profile>> GetProfileList();
+        Task<StatusResponse> DeleteProfile(int id);
+        Task<StatusResponse> UpdateProfile(Profile profile);
+        Task<Profile> GetProfileById(int id);
     }
 }
