@@ -19,7 +19,7 @@ namespace Longoka.API.Controllers
 
         // GET: api/<PersonnelEnseignantController>
         [HttpGet]
-        public ActionResult<IEnumerable<PersonnelEnseignants>> GetAll()
+        public ActionResult<IEnumerable<Enseignant>> GetAll()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Longoka.API.Controllers
 
         // GET api/<PersonnelEnseignantController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PersonnelEnseignants>> GetById(Guid id)
+        public async Task<ActionResult<Enseignant>> GetById(int id)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Longoka.API.Controllers
 
         // POST api/<PersonnelEnseignantController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] PersonnelEnseignants enseignant)
+        public async Task<ActionResult> Post([FromBody] Enseignant enseignant)
         {
             await Task.Run(() => _personnelEnseignantManager.CreateEnseignant(enseignant));
             try
@@ -71,7 +71,7 @@ namespace Longoka.API.Controllers
 
         // PUT api/<PersonnelEnseignantController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] PersonnelEnseignants enseignant)
+        public async Task<ActionResult> Put(int id, [FromBody] Enseignant enseignant)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Longoka.API.Controllers
 
         // DELETE api/<PersonnelEnseignantController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {

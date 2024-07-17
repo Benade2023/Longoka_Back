@@ -11,7 +11,6 @@ namespace Longoka.API.Controllers
     public class ClasseController : ControllerBase
     {
         private readonly IClasseManager _classeManager;
-
         public ClasseController(IClasseManager classeManager)
         {
             _classeManager = classeManager;
@@ -19,7 +18,7 @@ namespace Longoka.API.Controllers
 
         // GET: api/<ClasseController>
         [HttpGet]
-        public ActionResult<IEnumerable<Classes>> GetAll()
+        public ActionResult<IEnumerable<Classe>> GetAll()
         {
             try
             {
@@ -34,7 +33,7 @@ namespace Longoka.API.Controllers
 
         // GET api/<ClasseController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Classes>> GetById(Guid id)
+        public async Task<ActionResult<Classe>> GetById(int id)
         {
             try
             {
@@ -54,7 +53,7 @@ namespace Longoka.API.Controllers
 
         // POST api/<ClasseController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Classes classe)
+        public async Task<ActionResult> Post([FromBody] Classe classe)
         {
             await Task.Run(() => _classeManager.CreateClasse(classe));
             try
@@ -70,7 +69,7 @@ namespace Longoka.API.Controllers
 
         // PUT api/<ClasseController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] Classes classe)
+        public async Task<ActionResult> Put(int id, [FromBody] Classe classe)
         {
             try
             {
@@ -86,7 +85,7 @@ namespace Longoka.API.Controllers
 
         // DELETE api/<ClasseController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {

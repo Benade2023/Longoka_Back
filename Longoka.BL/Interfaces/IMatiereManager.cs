@@ -4,10 +4,10 @@ namespace Longoka.BL.Interfaces
 {
     public interface IMatiereManager
     {
-        bool CreateMatiere(Matieres matiere);
-        List<Matieres> GetMatiereList();
-        void DeleteMatiere(Guid id);
-        void UpdateMatiere(Matieres matiere);
-        Matieres GetMatiereById(Guid id);
+        Task<StatusResponse> CreateMatiere(Matiere matiere);
+        Task<IEnumerable<Matiere>> GetMatiereList();
+        Task<StatusResponse> DeleteMatiere(int id);
+        Task<StatusResponse> UpdateMatiere(Matiere matiere);
+        Task<Matiere> GetMatiereById(int id);
     }
 }

@@ -19,7 +19,7 @@ namespace Longoka.API.Controllers
 
         // GET: api/<UserController>
         [HttpGet]
-        public ActionResult<IEnumerable<Users>> GetAll()
+        public ActionResult<IEnumerable<User>> GetAll()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Longoka.API.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Users>> GetById(Guid id)
+        public async Task<ActionResult<User>> GetById(int id)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Longoka.API.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Users user)
+        public async Task<ActionResult> Post([FromBody] User user)
         {
             await Task.Run(() => _userManager.CreateUser(user));
             try
@@ -71,7 +71,7 @@ namespace Longoka.API.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] Users user)
+        public async Task<ActionResult> Put(int id, [FromBody] User user)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Longoka.API.Controllers
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {

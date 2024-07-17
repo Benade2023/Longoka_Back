@@ -8,7 +8,7 @@
       "sslPort": 44333
     }
   },
-  "profiles": {
+  "Profile": {
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,

@@ -2,12 +2,12 @@
 
 namespace Longoka.BL.Interfaces
 {
-    public interface IEcoleManager
+    public interface IEtablissementManager
     {
-        bool CreateEcole(Ecoles ecole);
-        List<Ecoles> GetEcoleList();
-        void DeleteEcole(Guid id);
-        void UpdateEcole(Ecoles ecole);
-        Ecoles GetEcoleById(Guid id);
+        Task<StatusResponse> CreateEtablissement(Etablissement ecole);
+        Task<IEnumerable<Etablissement>> GetEtablissementList();
+        Task<StatusResponse> DeleteEtablissement(int id);
+        Task<StatusResponse> UpdateEtablissement(Etablissement ecole);
+        Task<Etablissement> GetEtablissementById(int id);
     }
 }

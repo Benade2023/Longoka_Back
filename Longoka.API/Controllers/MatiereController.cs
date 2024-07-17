@@ -19,7 +19,7 @@ namespace Longoka.API.Controllers
 
         // GET: api/<MatiereController>
         [HttpGet]
-        public ActionResult<IEnumerable<Matieres>> GetAll()
+        public ActionResult<IEnumerable<Matiere>> GetAll()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Longoka.API.Controllers
 
         // GET api/<MatiereController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Matieres>> GetById(Guid id)
+        public async Task<ActionResult<Matiere>> GetById(int id)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Longoka.API.Controllers
 
         // POST api/<MatiereController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Matieres matiere)
+        public async Task<ActionResult> Post([FromBody] Matiere matiere)
         {
             await Task.Run(() => _matiereManager.CreateMatiere(matiere));
             try
@@ -71,7 +71,7 @@ namespace Longoka.API.Controllers
 
         // PUT api/<MatiereController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] Matieres matiere)
+        public async Task<ActionResult> Put(int id, [FromBody] Matiere matiere)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Longoka.API.Controllers
 
         // DELETE api/<MatiereController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {

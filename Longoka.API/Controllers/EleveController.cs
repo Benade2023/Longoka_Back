@@ -19,7 +19,7 @@ namespace Longoka.API.Controllers
 
         // GET: api/<EleveController>
         [HttpGet]
-        public ActionResult<IEnumerable<Eleves>> Get()
+        public ActionResult<IEnumerable<Eleve>> Get()
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Longoka.API.Controllers
 
         // GET api/<EleveController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Eleves>> GetById(Guid id)
+        public async Task<ActionResult<Eleve>> GetById(int id)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Longoka.API.Controllers
 
         // POST api/<EleveController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Eleves eleve)
+        public async Task<ActionResult> Post([FromBody] Eleve eleve)
         {
             await Task.Run(() => _eleveManager.CreateEleve(eleve));
             try
@@ -69,7 +69,7 @@ namespace Longoka.API.Controllers
 
         // PUT api/<EleveController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] Eleves eleve)
+        public async Task<ActionResult> Put(int id, [FromBody] Eleve eleve)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Longoka.API.Controllers
 
         // DELETE api/<EleveController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {

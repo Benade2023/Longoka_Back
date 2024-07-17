@@ -19,7 +19,7 @@ namespace Longoka.API.Controllers
 
         // GET: api/<ProfileController>
         [HttpGet]
-        public ActionResult<IEnumerable<Profiles>> GetAll()
+        public ActionResult<IEnumerable<Profile>> GetAll()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Longoka.API.Controllers
 
         // GET api/<ProfileController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profiles>> GetById(Guid id)
+        public async Task<ActionResult<Profile>> GetById(int id)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Longoka.API.Controllers
 
         // POST api/<ProfileController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Profiles profile)
+        public async Task<ActionResult> Post([FromBody] Profile profile)
         {
             await Task.Run(() => _profileManager.CreateProfile(profile));
             try
@@ -71,7 +71,7 @@ namespace Longoka.API.Controllers
 
         // PUT api/<ProfileController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] Profiles profile)
+        public async Task<ActionResult> Put(int id, [FromBody] Profile profile)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Longoka.API.Controllers
 
         // DELETE api/<ProfileController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {

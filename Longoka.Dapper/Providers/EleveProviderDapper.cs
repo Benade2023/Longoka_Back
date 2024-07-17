@@ -2,91 +2,131 @@
 using Longoka.Domain.DAO;
 using Longoka.Domain.Interfaces;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Longoka.Dapper.Providers
 {
-    public class EleveProviderDapper: IProvider<Eleves, Guid>
+    public class EleveProviderDapper : IProvider<Eleve,int>
     {
         private string _connexionString = string.Empty;
         private const string TABLENAME = "Eleves";
+        private NpgsqlConnection _connexion;
         public EleveProviderDapper(string connexionString)
         {
             _connexionString = connexionString;
+            _connexion = new NpgsqlConnection(_connexionString);
         }
 
-        public void Create(Eleves eleve)
+        public async Task<StatusResponse> Create(Eleve Eleve)
         {
-            var sqlRequette = $"INSERT INTO {TABLENAME} (username, password, completname, birthday, birthdayplace, gender, nationality, numerorue, ruename, quartier, ville, pays, parentid, ecoleid, profileid, classeid, matiereids) " +
-                    $"VALUES (@username, @password, @completname, @birthday, @birthdayplace, @gender, @nationality, @numerorue, @ruename, @quartier, @ville, @pays, @parentid, @ecoleid, @profileid, @classeid, @matiereids)";
-            using var dapperConnexion = new NpgsqlConnection(_connexionString);
-            dapperConnexion.ExecuteScalar<Eleves>(sqlRequette);
+            try
+            {
+                var sqlRequette = $"INSERT INTO {TABLENAME} (nom, prenoms, genre, datenaissance, classeid, parentid) " +
+                    $"VALUES (@nom, @prenoms, @genre,@datenaissance,@classeid,@parentid)";
+                await _connexion.OpenAsync();
+                await _connexion.ExecuteScalarAsync<Eleve>(sqlRequette, Eleve);
+
+                return new StatusResponse()
+                {
+                    Message = "Enrégistrment effectué avce succès."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
         }
 
-        public List<Eleves> GetAll()
+        public async Task<StatusResponse> Delete(int id)
+        {
+            try
+            {
+                var sqlRequette = $"DELETE FROM {TABLENAME} WHERE eleveid = {id}";
+                await _connexion.OpenAsync();
+                var result = await _connexion.QueryFirstOrDefaultAsync(sqlRequette, id);
+
+                return new StatusResponse()
+                {
+                    Message = "Suppression effectuée avce succès."
+                };
+            }
+            catch (Exception ex)
+            {
+
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+
+        public async Task<IEnumerable<Eleve>> GetAll()
         {
             try
             {
                 var sqlRequette = $"SELECT * FROM {TABLENAME}";
-                using var dapperConnexion = new NpgsqlConnection(_connexionString);
-                var result = dapperConnexion.Query<Eleves>(sqlRequette);
+                await _connexion.OpenAsync();
+                var result = await _connexion.QueryAsync<Eleve>(sqlRequette);
+
+                if (result is null)
+                {
+                    return [];
+                }
                 return result.ToList();
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
-        public Eleves GetById(Guid id)
+        public async Task<Eleve> GetById(int id)
         {
             try
             {
-                var sqlRequette = $"SELECT * FROM {TABLENAME} WHERE EleveId = {id}";
-                using var dapperConnexion = new NpgsqlConnection(_connexionString);
-                var result = dapperConnexion.QueryFirstOrDefault<Eleves>(sqlRequette);
+                var sqlRequette = $"SELECT * FROM {TABLENAME} WHERE eleveid = {id}";
+                await _connexion.OpenAsync();
+                var result = await _connexion.QuerySingleOrDefaultAsync<Eleve>(sqlRequette);
+
+                if (result is null)
+                {
+                    return null!;
+                }
+
                 return result;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
-        public void Update(Eleves eleve)
+        public async Task<StatusResponse> Update(Eleve eleve)
         {
             try
             {
-                var sqlRequette = $"UPDATE {TABLENAME} SET username=@username, password=@password, completname=@completname, birthday=@birthday, birthdayplace=@birthdayplace, gender=@gender, nationality=@nationality, numerorue=@numerorue, ruename=@ruename, quartier=@quartier, ville=@ville, pays=@pays, parentid=@parentid, ecoleid=@ecoleid, profileid=@profileid, classeid=@classeid, matiereids=@matiereids";
-                using var dapperConnexion = new NpgsqlConnection(_connexionString);
-                dapperConnexion.ExecuteScalar(sqlRequette, eleve);
-            }
-            catch (Exception)
-            {
+                var sqlRequette = $"UPDATE {TABLENAME} SET nom=@nom, prenoms=@prenoms, genre=@genre,datenaissance=@datenaissance,classeid=@classeid,parentid=@parentid" +
+                   $" WHERE Eleveid = {eleve.EleveId}";
+                await _connexion.OpenAsync();
+                var result = await _connexion.ExecuteAsync(sqlRequette, eleve);
+                if (result == 0)
+                {
+                    throw new InvalidOperationException("Aucun utilisateur trouvé avec l'ID spécifié.");
+                }
 
-                throw;
+                return new StatusResponse() { Message = "Mise à jour effectuée avec succès" };
+
+            }
+            catch (NpgsqlException ex)
+            {
+                return new StatusResponse() { Success = false, Message = ex.Message };
             }
         }
 
-        public void Delete(Guid id)
-        {
-            try
-            {
-                var sqlRequette = $"DELETE FROM {TABLENAME} WHERE EleveId = {id} ";
-                using var dapperConnexion = new NpgsqlConnection(_connexionString);
-                dapperConnexion.Query(sqlRequette, id);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
     }
 }

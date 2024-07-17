@@ -1,33 +1,96 @@
 ﻿using Longoka.BL.Interfaces;
 using Longoka.Domain.DAO;
 using Longoka.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Longoka.BL.BL
 {
     public class ProfileManager : IProfileManager
     {
-        private readonly IProvider<Profiles, Guid> _provider;
+        private readonly IProvider<Profile, int> _provider;
 
-        public ProfileManager(IProvider<Profiles, Guid> provider)
+        public ProfileManager(IProvider<Profile, int> provider)
         {
             _provider = provider;
         }
 
-        public bool CreateProfile(Profiles profile)
+        public async Task<StatusResponse> CreateProfile(Profile profile)
         {
-            if (string.IsNullOrEmpty(profile.ProfileName))
-            {
-                throw new Exception("Le nom du profile est obligatoire");
-            }
             try
             {
-                _provider.Create(profile);
-                return true;
+                var statut = await _provider.Create(profile);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = "Échec d'enrégistrement.",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+
+        public async Task<StatusResponse> DeleteProfile(int id)
+        {
+            try
+            {
+                var statut = await _provider.Delete(id);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echec de supression" };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+
+        public async Task<Profile> GetProfileById(int id)
+        {
+            try
+            {
+                var result = await _provider.GetById(id);
+                if (result != null)
+                {
+                    return result;
+                }
+                return null!;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<IEnumerable<Profile>> GetProfileList()
+        {
+            try
+            {
+                var result = await _provider.GetAll();
+                if (result == null)
+                {
+                    return [];
+                }
+                return result;
             }
             catch (Exception)
             {
@@ -36,57 +99,23 @@ namespace Longoka.BL.BL
             }
         }
 
-        public void DeleteProfile(Guid id)
+        public async Task<StatusResponse> UpdateProfile(Profile profile)
         {
             try
             {
-                _provider.Delete(id);
+                var statut = await _provider.Update(profile);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echèc de mise à jour." };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
-            }
-        }
-
-        public Profiles GetProfileById(Guid id)
-        {
-            try
-            {
-                return _provider.GetById(id);
+                return new StatusResponse() { Success = false, Message = ex.Message };
 
             }
-            catch (Exception)
-            {
 
-                throw;
-            }
-        }
-
-        public List<Profiles> GetProfileList()
-        {
-            try
-            {
-                return _provider.GetAll();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public void UpdateProfile(Profiles profile)
-        {
-            try
-            {
-                _provider.Update(profile);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

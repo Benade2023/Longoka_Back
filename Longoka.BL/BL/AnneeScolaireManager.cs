@@ -6,14 +6,12 @@ namespace Longoka.BL.BL
 {
     public class AnneeScolaireManager : IAnneeScolaireManager
     {
-        private readonly IProvider<AnneeScolaires, Guid> _provider;
-
-        public AnneeScolaireManager(IProvider<AnneeScolaires, Guid> provider)
+        private readonly IProvider<AnneeScolaires, int> _provider;
+        public AnneeScolaireManager(IProvider<AnneeScolaires, int> provider)
         {
             _provider = provider;
         }
-
-        public bool CreateAnneeScolaire(AnneeScolaires anneeScolaire)
+        public async Task<StatusResponse> CreateAnneeScolaire(AnneeScolaires anneeScolaire)
         {
             if (string.IsNullOrEmpty(anneeScolaire.AnneeScolaire))
             {
@@ -21,8 +19,79 @@ namespace Longoka.BL.BL
             }
             try
             {
-                _provider.Create(anneeScolaire);
-                return true;
+                var statut = await _provider.Create(anneeScolaire);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = "Échec d'enrégistrement.",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+
+        public async Task<StatusResponse> DeleteAnneeScolaire(int id)
+        {
+            try
+            {
+                var statut = await _provider.Delete(id);
+                if (statut.Success)
+                {
+                    return statut;
+                }
+                return new StatusResponse() { Success = false, Message = "Echec de supression" };
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse()
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+
+        public async Task<AnneeScolaires> GetAnneeScolaireById(int id)
+        {
+            try
+            {
+                var result = await _provider.GetById(id);
+                if (result != null)
+                {
+                    return result;
+                }
+                return null!;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<IEnumerable<AnneeScolaires>> GetAnneeScolaireList()
+        {
+            try
+            {
+                var result = await _provider.GetAll();
+                if (result == null)
+                {
+                    return [];
+                }
+                return result;
             }
             catch (Exception)
             {
@@ -31,57 +100,23 @@ namespace Longoka.BL.BL
             }
         }
 
-        public void DeleteAnneeScolaire(Guid id)
+        public async Task<StatusResponse> UpdateAnneeScolaire(AnneeScolaires anneeScolaire)
         {
             try
             {
-                _provider.Delete(id);
+               var statut = await _provider.Update(anneeScolaire);
+                if (statut.Success)
+                {
+                      return statut;
+                }
+                return new StatusResponse() { Success= false, Message="Echèc de mise à jour."};
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new StatusResponse() { Success= false, Message=ex.Message};
+                
             }
-        }
 
-        public AnneeScolaires GetAnneeScolaireById(Guid id)
-        {
-            try
-            {
-                return _provider.GetById(id);
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public List<AnneeScolaires> GetAnneeScolaireList()
-        {
-            try
-            {
-                return _provider.GetAll();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public void UpdateAnneeScolaire(AnneeScolaires anneeScolaire)
-        {
-            try
-            {
-                _provider.Update(anneeScolaire);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

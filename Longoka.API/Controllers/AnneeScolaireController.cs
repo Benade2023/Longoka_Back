@@ -35,7 +35,7 @@ namespace Longoka.API.Controllers
 
         // GET api/<AnneeScolaireController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AnneeScolaires>> GetById(Guid id)
+        public async Task<ActionResult<AnneeScolaires>> GetById(int id)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Longoka.API.Controllers
 
         // PUT api/<AnneeScolaireController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] AnneeScolaires annee)
+        public async Task<ActionResult> Put(int id, [FromBody] AnneeScolaires annee)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Longoka.API.Controllers
 
         // DELETE api/<AnneeScolaireController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {

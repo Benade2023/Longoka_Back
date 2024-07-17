@@ -4,10 +4,10 @@ namespace Longoka.BL.Interfaces
 {
     public interface IAnneeScolaireManager
     {
-        bool CreateAnneeScolaire(AnneeScolaires anneeScolaire);
-        List<AnneeScolaires> GetAnneeScolaireList();
-        void DeleteAnneeScolaire(Guid id);
-        void UpdateAnneeScolaire(AnneeScolaires anneeScolaire);
-        AnneeScolaires GetAnneeScolaireById(Guid id);
+        Task<StatusResponse> CreateAnneeScolaire(AnneeScolaires anneeScolaire);
+        Task<IEnumerable<AnneeScolaires>> GetAnneeScolaireList();
+        Task<StatusResponse> DeleteAnneeScolaire(int id);
+        Task<StatusResponse> UpdateAnneeScolaire(AnneeScolaires anneeScolaire);
+        Task<AnneeScolaires> GetAnneeScolaireById(int id);
     }
 }

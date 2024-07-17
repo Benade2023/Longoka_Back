@@ -4,10 +4,10 @@ namespace Longoka.BL.Interfaces
 {
     public interface IParentEleveManager
     {
-        bool CreateParent(ParentEleves parent);
-        List<ParentEleves> GetParentList();
-        void DeleteParent(Guid id);
-        void UpdateParent(ParentEleves parent);
-        ParentEleves GetParentById(Guid id);
+        Task<StatusResponse> CreateParent(ParentEleve parent);
+        Task<IEnumerable<ParentEleve>> GetParentList();
+        Task<StatusResponse> DeleteParent(int id);
+        Task<StatusResponse> UpdateParent(ParentEleve parent);
+        Task<ParentEleve> GetParentById(int id);
     }
 }
